@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PSY 503 心理学的历史与领域 · 学期进度流程图</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #8C1D40; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    #__bundler_loading { position: fixed; bottom: 20px; right: 20px; font: 13px/1.4 -apple-system, BlinkMacSystemFont, sans-serif; color: #666; background: #fff; padding: 8px 14px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.12); z-index: 10000; }
+    #__bundler_thumbnail { position: fixed; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #8C1D40; z-index: 9999; }
+    #__bundler_thumbnail svg { width: 100%; height: 100%; object-fit: contain; }
+    #__bundler_placeholder { color: #999; font-size: 14px; }
+  </style>
+  <noscript>
+    <style>#__bundler_loading { display: none; }</style>
+    <div style="position:fixed;bottom:12px;left:12px;font:13px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#999;background:rgba(255,255,255,0.9);padding:6px 12px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:10000;">
+      This page requires JavaScript to display.
+    </div>
+  </noscript>
+</head>
+<body>
+  <div id="__bundler_thumbnail">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#8C1D40"></rect>
+    <rect x="360" y="220" width="480" height="6" fill="#FFC627"></rect>
+    <text x="600" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="120" font-weight="700" fill="#FFC627" letter-spacing="8">PSY 503</text>
+    <text x="600" y="440" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="28" fill="#FAF6F0" letter-spacing="6" opacity="0.7">7-WEEK ROADMAP</text>
+    <g transform="translate(380, 540)" fill="none" stroke="#FFC627" stroke-width="3">
+      <circle cx="0" cy="0" r="18"></circle>
+      <line x1="36" y1="0" x2="74" y2="0"></line>
+      <circle cx="110" cy="0" r="18"></circle>
+      <line x1="146" y1="0" x2="184" y2="0"></line>
+      <circle cx="220" cy="0" r="18"></circle>
+      <line x1="256" y1="0" x2="294" y2="0"></line>
+      <circle cx="330" cy="0" r="18"></circle>
+      <line x1="366" y1="0" x2="404" y2="0"></line>
+      <circle cx="440" cy="0" r="18"></circle>
+    </g>
+  </svg>
+</div>
+  <div id="__bundler_loading">Unpacking...</div>
+
+  <script>
+    
+document.addEventListener('DOMContentLoaded', async function() {
+  const loading = document.getElementById('__bundler_loading');
+  function setStatus(msg) { if (loading) loading.textContent = msg; }
+
+  // Error sink persists across replaceWith since it's on window, not the DOM.
+  window.addEventListener('error', function(e) {
+    var p = document.body || document.documentElement;
+    var d = document.getElementById('__bundler_err') || p.appendChild(document.createElement('div'));
+    d.id = '__bundler_err';
+    d.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;font:12px/1.4 ui-monospace,monospace;background:#2a1215;color:#ff8a80;padding:10px 14px;border-radius:8px;border:1px solid #5c2b2e;z-index:99999;white-space:pre-wrap;max-height:40vh;overflow:auto';
+    d.textContent = (d.textContent ? d.textContent + String.fromCharCode(10) : '') +
+      '[bundle] ' + (e.message || e.type) +
+      (e.filename ? ' (' + e.filename.slice(0, 60) + ':' + e.lineno + ')' : '');
+  }, true);
+
+  try {
+    const manifestEl = document.querySelector('script[type="__bundler/manifest"]');
+    const templateEl = document.querySelector('script[type="__bundler/template"]');
+    if (!manifestEl || !templateEl) {
+      setStatus('Error: missing bundle data');
+      console.error('[bundler] Missing script tags — manifestEl:', !!manifestEl, 'templateEl:', !!templateEl);
+      return;
+    }
+
+    const manifest = JSON.parse(manifestEl.textContent);
+    let template = JSON.parse(templateEl.textContent);
+
+    const uuids = Object.keys(manifest);
+    setStatus('Unpacking ' + uuids.length + ' assets...');
+
+    const blobUrls = {};
+    await Promise.all(uuids.map(async (uuid) => {
+      const entry = manifest[uuid];
+      try {
+        const binaryStr = atob(entry.data);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+        let finalBytes = bytes;
+        if (entry.compressed) {
+          if (typeof DecompressionStream !== 'undefined') {
+            const ds = new DecompressionStream('gzip');
+            const writer = ds.writable.getWriter();
+            const reader = ds.readable.getReader();
+            writer.write(bytes);
+            writer.close();
+            const chunks = [];
+            let totalLen = 0;
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              chunks.push(value);
+              totalLen += value.length;
+            }
+            finalBytes = new Uint8Array(totalLen);
+            let offset = 0;
+            for (const chunk of chunks) { finalBytes.set(chunk, offset); offset += chunk.length; }
+          } else {
+            console.warn('DecompressionStream not available, asset ' + uuid + ' may not render');
+          }
+        }
+
+        blobUrls[uuid] = URL.createObjectURL(new Blob([finalBytes], { type: entry.mime }));
+      } catch (err) {
+        console.error('Failed to decode asset ' + uuid + ':', err);
+        blobUrls[uuid] = URL.createObjectURL(new Blob([], { type: entry.mime }));
+      }
+    }));
+
+    const extResEl = document.querySelector('script[type="__bundler/ext_resources"]');
+    const extResources = extResEl ? JSON.parse(extResEl.textContent) : [];
+    const resourceMap = {};
+    for (const entry of extResources) {
+      if (blobUrls[entry.uuid]) resourceMap[entry.id] = blobUrls[entry.uuid];
+    }
+
+    setStatus('Rendering...');
+    for (const uuid of uuids) template = template.split(uuid).join(blobUrls[uuid]);
+
+    // Strip integrity + crossorigin — blob URLs from a file:// document inherit
+    // a null origin, so crossorigin forces a CORS fetch that SRI then rejects.
+    // The manifest bytes are ours; SRI protects against CDN compromise, not this.
+    template = template.replace(/\s+integrity="[^"]*"/gi, '').replace(/\s+crossorigin="[^"]*"/gi, '');
+
+    const resourceScript = '<script>window.__resources = ' +
+      JSON.stringify(resourceMap).split('</' + 'script>').join('<\\/' + 'script>') +
+      ';</' + 'script>';
+    // Inject after <head> so the DOCTYPE stays first; prepending the script
+    // would push the parser into quirks mode. DOMParser always emits a <head>
+    // (synthesizing one if the source HTML omitted it) but may carry
+    // attributes through, so match the full opening tag. slice() rather than
+    // replace() keeps us clear of $-pattern substitution in resourceScript.
+    const headOpen = template.match(/<head[^>]*>/i);
+    if (headOpen) {
+      const i = headOpen.index + headOpen[0].length;
+      template = template.slice(0, i) + resourceScript + template.slice(i);
+    }
+
+    // Parse the template and swap the root element. Scripts inserted via
+    // DOMParser/replaceWith are inert per spec — re-create each with
+    // createElement so they execute, awaiting onload for src scripts to
+    // preserve ordering (React before ReactDOM before Babel before text/babel).
+    const doc = new DOMParser().parseFromString(template, 'text/html');
+    document.documentElement.replaceWith(doc.documentElement);
+    const dead = Array.from(document.scripts);
+    for (const old of dead) {
+      const s = document.createElement('script');
+      for (const a of old.attributes) s.setAttribute(a.name, a.value);
+      s.textContent = old.textContent;
+      // text/babel scripts with a src: fetch and inline. transformScriptTags
+      // does XHR against the src, but blob:null/ from a file:// origin is
+      // silently dropped. Inlining makes it a plain inline babel script,
+      // which transformScriptTags handles unconditionally.
+      if ((s.type === 'text/babel' || s.type === 'text/jsx') && s.src) {
+        const r = await fetch(s.src);
+        s.textContent = await r.text();
+        s.removeAttribute('src');
+      }
+      const p = s.src ? new Promise(function(r) { s.onload = s.onerror = r; }) : null;
+      old.replaceWith(s);
+      if (p) await p;
+    }
+    // Babel standalone auto-transforms type=text/babel on DOMContentLoaded,
+    // which fired before we swapped the document. Trigger manually if present.
+    if (window.Babel && typeof window.Babel.transformScriptTags === 'function') {
+      window.Babel.transformScriptTags();
+    }
+  } catch (err) {
+    setStatus('Error unpacking: ' + err.message);
+    console.error('Bundle unpack error:', err);
+  }
+});
+
+  </script>
+
+  <script type="__bundler/manifest">
+{}
+  </script>
+
+  <script type="__bundler/ext_resources">
+[]
+  </script>
+
+  <script type="__bundler/template">
+"<!DOCTYPE html>\n<html lang=\"zh-CN\"><head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\">\n<meta http-equiv=\"Pragma\" content=\"no-cache\">\n<meta http-equiv=\"Expires\" content=\"0\">\n<title>PSY 503 心理学的历史与领域 · 学期进度流程图<\u002Ftitle>\n<style>\n  :root {\n    --maroon: #8C1D40;\n    --maroon-deep: #5C0E2A;\n    --maroon-ink: #3A0819;\n    --gold: #FFC627;\n    --gold-soft: #FFD86B;\n    --cream: #FAF6F0;\n    --cream-dim: rgba(250, 246, 240, 0.72);\n    --cream-faint: rgba(250, 246, 240, 0.15);\n    --ink: #1A1A1A;\n  }\n\n  * { box-sizing: border-box; }\n\n  html, body {\n    margin: 0;\n    padding: 0;\n    background: var(--maroon);\n    color: var(--cream);\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Source Han Sans CN\", sans-serif;\n    font-feature-settings: \"kern\", \"palt\";\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    line-height: 1.65;\n  }\n\n  body {\n    background:\n      radial-gradient(ellipse at top, rgba(255, 198, 39, 0.06) 0%, transparent 55%),\n      var(--maroon);\n    min-height: 100vh;\n  }\n\n  /* ---------- HEADER ---------- */\n  .site-header {\n    border-bottom: 1px solid rgba(255, 198, 39, 0.22);\n    padding: 56px 48px 40px;\n    position: relative;\n  }\n  .site-header::before {\n    content: \"\";\n    position: absolute;\n    left: 48px;\n    top: 56px;\n    width: 56px;\n    height: 3px;\n    background: var(--gold);\n  }\n  .header-inner {\n    max-width: 1400px;\n    margin: 0 auto;\n    padding-top: 18px;\n  }\n  .eyebrow {\n    font-size: 11px;\n    letter-spacing: 0.28em;\n    text-transform: uppercase;\n    color: var(--gold);\n    font-weight: 600;\n    margin: 0 0 14px;\n  }\n  .course-title {\n    color: var(--gold);\n    font-size: clamp(28px, 3.6vw, 44px);\n    font-weight: 700;\n    letter-spacing: -0.01em;\n    margin: 0;\n    line-height: 1.25;\n  }\n  .course-subtitle {\n    color: var(--cream-dim);\n    font-size: clamp(14px, 1.4vw, 17px);\n    font-weight: 300;\n    margin: 10px 0 0;\n    letter-spacing: 0.02em;\n    font-style: italic;\n  }\n\n  /* ---------- INTRO ---------- */\n  .intro {\n    max-width: 1400px;\n    margin: 0 auto;\n    padding: 36px 48px 8px;\n    display: flex;\n    align-items: baseline;\n    gap: 18px;\n  }\n  .intro-rule {\n    width: 24px;\n    height: 1px;\n    background: var(--gold);\n    flex-shrink: 0;\n    transform: translateY(-4px);\n  }\n  .intro p {\n    margin: 0;\n    color: var(--cream);\n    font-size: 16px;\n    font-weight: 300;\n  }\n\n  /* ---------- LEGEND ---------- */\n  .legend {\n    max-width: 1400px;\n    margin: 0 auto;\n    padding: 18px 48px 28px;\n    display: flex;\n    gap: 14px;\n    flex-wrap: wrap;\n    align-items: center;\n  }\n  .legend-label {\n    font-size: 11px;\n    color: var(--cream-dim);\n    letter-spacing: 0.18em;\n    text-transform: uppercase;\n    margin-right: 4px;\n  }\n  .tag {\n    display: inline-flex;\n    align-items: center;\n    gap: 7px;\n    font-size: 12.5px;\n    font-weight: 600;\n    padding: 5px 11px;\n    border-radius: 3px;\n    letter-spacing: 0.02em;\n    white-space: nowrap;\n  }\n  .tag-due {\n    background: var(--gold);\n    color: var(--maroon-ink);\n  }\n  .tag-learn {\n    background: transparent;\n    color: var(--gold);\n    border: 1px solid var(--gold);\n  }\n  .tag .dot {\n    width: 6px;\n    height: 6px;\n    border-radius: 50%;\n    background: currentColor;\n  }\n\n  /* ---------- TIMELINE ---------- */\n  .timeline {\n    max-width: 1400px;\n    margin: 0 auto;\n    padding: 8px 48px 64px;\n    display: grid;\n    grid-template-columns: repeat(5, 1fr);\n    gap: 0;\n    position: relative;\n  }\n\n  .phase {\n    position: relative;\n    display: flex;\n    flex-direction: column;\n    padding: 0 14px;\n  }\n\n  /* Stepper above each card */\n  .stepper {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 8px 0 18px;\n    position: relative;\n  }\n  .step-num {\n    font-family: \"Georgia\", \"Times New Roman\", serif;\n    font-size: 13px;\n    letter-spacing: 0.22em;\n    color: var(--gold);\n    font-weight: 600;\n  }\n  .step-week {\n    font-size: 14px;\n    color: var(--cream);\n    font-weight: 600;\n  }\n\n  /* The connecting line + arrow lives in the gap between phases */\n  .phase:not(:last-child)::after {\n    content: \"\";\n    position: absolute;\n    top: 18px;\n    right: -7px;\n    width: 14px;\n    height: 1px;\n    background: var(--gold);\n    z-index: 2;\n  }\n  .arrow {\n    position: absolute;\n    top: 12px;\n    right: -16px;\n    width: 18px;\n    height: 14px;\n    z-index: 3;\n    pointer-events: none;\n  }\n  .phase:last-child .arrow { display: none; }\n\n  /* Card */\n  .card {\n    background: var(--maroon-deep);\n    border: 1px solid rgba(255, 198, 39, 0.18);\n    border-top: 3px solid var(--gold);\n    border-radius: 4px;\n    padding: 22px 22px 24px;\n    flex: 1;\n    display: flex;\n    flex-direction: column;\n    gap: 20px;\n    min-height: 100%;\n  }\n\n  .phase-title {\n    font-size: 19px;\n    font-weight: 700;\n    color: var(--cream);\n    margin: 0 0 4px;\n    letter-spacing: 0.01em;\n  }\n  .phase-meta {\n    font-size: 11.5px;\n    color: var(--cream-dim);\n    letter-spacing: 0.16em;\n    text-transform: uppercase;\n    margin: 0 0 4px;\n    font-weight: 500;\n  }\n  .phase-header {\n    border-bottom: 1px solid rgba(255, 198, 39, 0.18);\n    padding-bottom: 14px;\n  }\n\n  .section {\n    display: flex;\n    flex-direction: column;\n    gap: 10px;\n  }\n\n  .section-head {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n  }\n  .section-head .tag {\n    font-size: 11.5px;\n    padding: 4px 9px;\n  }\n  .section-en {\n    font-size: 10.5px;\n    letter-spacing: 0.16em;\n    text-transform: uppercase;\n    color: var(--cream-dim);\n    font-weight: 500;\n  }\n\n  ul.items {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n    display: flex;\n    flex-direction: column;\n    gap: 9px;\n  }\n  ul.items li {\n    position: relative;\n    padding-left: 16px;\n    font-size: 13.5px;\n    line-height: 1.55;\n    color: var(--cream);\n    font-weight: 300;\n  }\n  ul.items.due li {\n    color: var(--cream);\n    font-weight: 400;\n  }\n  ul.items li::before {\n    content: \"\";\n    position: absolute;\n    left: 0;\n    top: 9px;\n    width: 6px;\n    height: 1px;\n    background: var(--gold);\n  }\n  ul.items.due li::before {\n    width: 6px;\n    height: 6px;\n    border-radius: 50%;\n    background: var(--gold);\n    top: 7px;\n    left: 0;\n  }\n\n  /* Phase 4 is wider/taller naturally — give it a soft visual marker */\n  .phase.wide .card {\n    background: linear-gradient(180deg, var(--maroon-deep) 0%, #4A0820 100%);\n  }\n  .phase.wide .phase-meta {\n    color: var(--gold);\n  }\n\n  /* ---------- FOOTER ---------- */\n  .site-footer {\n    border-top: 1px solid rgba(255, 198, 39, 0.18);\n    padding: 22px 48px;\n    text-align: center;\n    color: rgba(250, 246, 240, 0.45);\n    font-size: 11.5px;\n    letter-spacing: 0.08em;\n  }\n  .site-footer span {\n    margin: 0 8px;\n    color: rgba(255, 198, 39, 0.6);\n  }\n\n  /* ---------- RESPONSIVE ---------- */\n  @media (max-width: 1100px) {\n    .timeline {\n      grid-template-columns: 1fr;\n      gap: 0;\n      padding: 8px 32px 48px;\n    }\n    .phase {\n      padding: 0 0 36px;\n    }\n    .phase:not(:last-child)::after {\n      content: \"\";\n      position: absolute;\n      top: auto;\n      bottom: 14px;\n      right: auto;\n      left: 50%;\n      width: 1px;\n      height: 20px;\n      background: var(--gold);\n      transform: translateX(-50%);\n    }\n    .arrow {\n      top: auto;\n      right: auto;\n      bottom: 0;\n      left: 50%;\n      transform: translateX(-50%) rotate(90deg);\n    }\n    .site-header {\n      padding: 40px 28px 32px;\n    }\n    .site-header::before { left: 28px; top: 40px; }\n    .intro, .legend {\n      padding-left: 32px;\n      padding-right: 32px;\n    }\n    .site-footer {\n      padding: 22px 28px;\n      line-height: 1.8;\n    }\n  }\n\n  @media (max-width: 520px) {\n    .site-header { padding: 32px 22px 26px; }\n    .site-header::before { left: 22px; top: 32px; }\n    .intro, .legend { padding-left: 22px; padding-right: 22px; }\n    .timeline { padding: 8px 22px 40px; }\n    .card { padding: 20px 18px 22px; }\n    .legend { gap: 10px; }\n  }\n\n  @media print {\n    body { background: white; color: black; }\n  }\n<\u002Fstyle>\n<\u002Fhead>\n<body>\n\n\n\n<header class=\"site-header\">\n  <div class=\"header-inner\">\n    <p class=\"eyebrow\">AZX Online · M.S. in Psychology<\u002Fp>\n    <h1 class=\"course-title\">PSY 503 心理学的历史与领域 · 学期进度流程图<\u002Fh1>\n    <p class=\"course-subtitle\">History and Scope of Psychological Science · 7-Week Roadmap<\u002Fp>\n  <\u002Fdiv>\n<\u002Fheader>\n\n<section class=\"intro\">\n  <span class=\"intro-rule\" aria-hidden=\"true\"><\u002Fspan>\n  <p>本课程为期七周。下面是各阶段的截止作业与学习任务。<\u002Fp>\n<\u002Fsection>\n\n<div class=\"legend\" aria-label=\"图例\">\n  <span class=\"legend-label\">图例 / Legend<\u002Fspan>\n  <span class=\"tag tag-due\"><span class=\"dot\"><\u002Fspan>截止作业 · Required Submissions<\u002Fspan>\n  <span class=\"tag tag-learn\"><span class=\"dot\"><\u002Fspan>学习任务 · Learning Tasks<\u002Fspan>\n<\u002Fdiv>\n\n<main class=\"timeline\">\n\n  <!-- ============ PHASE 1 ============ -->\n  <article class=\"phase\">\n    <div class=\"stepper\">\n      <span class=\"step-num\">PHASE 01<\u002Fspan>\n    <\u002Fdiv>\n    <svg class=\"arrow\" viewBox=\"0 0 18 14\" aria-hidden=\"true\">\n      <path d=\"M0 7 L14 7 M9 2 L14 7 L9 12\" stroke=\"#FFC627\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"square\" stroke-linejoin=\"miter\"><\u002Fpath>\n    <\u002Fsvg>\n    <div class=\"card\">\n      <div class=\"phase-header\">\n        <p class=\"phase-meta\">Week 01<\u002Fp>\n        <h2 class=\"phase-title\">第一周<\u002Fh2>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-due\">截止作业<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items due\">\n          <li>学术诚信承诺书<\u002Fli>\n          <li>课程大纲测验<\u002Fli>\n          <li>讨论:打个招呼吧<\u002Fli>\n          <li>防止抄袭知识测验<\u002Fli>\n          <li>单元讨论<\u002Fli>\n          <li>学术文献阅读笔记<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-learn\">学习任务<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items\">\n          <li>了解各项作业的作业要求,尤其是文献阅读笔记<\u002Fli>\n          <li>观看课程视频,根据自己的时间和需求选择性阅读单元中提供的阅读材料<\u002Fli>\n          <li>学会从期刊官网或 ASU 图书馆数据库中下载学术文献<\u002Fli>\n          <li>查看\"开学初期同学常见问题\"<\u002Fli>\n          <li>查看课程大纲<\u002Fli>\n          <li>查看\"公告\"中的\"Canvas 操作演示\",熟悉 Canvas 学习平台的使用<\u002Fli>\n          <li>参加第一周第一天的线上交流 Zoom 会议<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n    <\u002Fdiv>\n  <\u002Farticle>\n\n  <!-- ============ PHASE 2 ============ -->\n  <article class=\"phase\">\n    <div class=\"stepper\">\n      <span class=\"step-num\">PHASE 02<\u002Fspan>\n    <\u002Fdiv>\n    <svg class=\"arrow\" viewBox=\"0 0 18 14\" aria-hidden=\"true\">\n      <path d=\"M0 7 L14 7 M9 2 L14 7 L9 12\" stroke=\"#FFC627\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"square\" stroke-linejoin=\"miter\"><\u002Fpath>\n    <\u002Fsvg>\n    <div class=\"card\">\n      <div class=\"phase-header\">\n        <p class=\"phase-meta\">Week 02<\u002Fp>\n        <h2 class=\"phase-title\">第二周<\u002Fh2>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-due\">截止作业<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items due\">\n          <li>单元讨论<\u002Fli>\n          <li>学术文献阅读笔记<\u002Fli>\n          <li>APA 格式参考资源测试<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-learn\">学习任务<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items\">\n          <li>观看课程视频,根据自己的时间和需求选择性阅读单元中提供的阅读材料<\u002Fli>\n          <li>掌握 APA 格式的基本结构,并学会使用 AI 或网络资源自动生成文献的 APA 参考信息<\u002Fli>\n          <li>根据自己的学习兴趣使用图书馆资源搜索学术文献<\u002Fli>\n          <li>阅读自己感兴趣的文献,开始了解学术文献的基本结构<\u002Fli>\n          <li>在力所能及的范围内,尝试讨论第二个讨论题目<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n    <\u002Fdiv>\n  <\u002Farticle>\n\n  <!-- ============ PHASE 3 ============ -->\n  <article class=\"phase\">\n    <div class=\"stepper\">\n      <span class=\"step-num\">PHASE 03<\u002Fspan>\n    <\u002Fdiv>\n    <svg class=\"arrow\" viewBox=\"0 0 18 14\" aria-hidden=\"true\">\n      <path d=\"M0 7 L14 7 M9 2 L14 7 L9 12\" stroke=\"#FFC627\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"square\" stroke-linejoin=\"miter\"><\u002Fpath>\n    <\u002Fsvg>\n    <div class=\"card\">\n      <div class=\"phase-header\">\n        <p class=\"phase-meta\">Week 03<\u002Fp>\n        <h2 class=\"phase-title\">第三周<\u002Fh2>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-due\">截止作业<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items due\">\n          <li>单元讨论<\u002Fli>\n          <li>学术文献阅读笔记<\u002Fli>\n          <li>心理学学术文献与搜索测验<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-learn\">学习任务<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items\">\n          <li>对心理学学术文献与日常阅读材料的区别有一个整体上的认识<\u002Fli>\n          <li>熟练通过数据库下载学术文献全文<\u002Fli>\n          <li>开始练习\"阅读 → 提取关键词 → 搜索 → 阅读 → 提取新关键词 → 搜索\"的循环,找到自己感兴趣的研究文献<\u002Fli>\n          <li>通过周末答疑与任课教师和同学沟通<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n    <\u002Fdiv>\n  <\u002Farticle>\n\n  <!-- ============ PHASE 4 (Weeks 4–6) ============ -->\n  <article class=\"phase wide\">\n    <div class=\"stepper\">\n      <span class=\"step-num\">PHASE 04<\u002Fspan>\n    <\u002Fdiv>\n    <svg class=\"arrow\" viewBox=\"0 0 18 14\" aria-hidden=\"true\">\n      <path d=\"M0 7 L14 7 M9 2 L14 7 L9 12\" stroke=\"#FFC627\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"square\" stroke-linejoin=\"miter\"><\u002Fpath>\n    <\u002Fsvg>\n    <div class=\"card\">\n      <div class=\"phase-header\">\n        <p class=\"phase-meta\">Weeks 04 – 06 · 三周阶段<\u002Fp>\n        <h2 class=\"phase-title\">第四周至第六周<\u002Fh2>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-due\">截止作业<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items due\">\n          <li>单元讨论<\u002Fli>\n          <li>学术文献阅读笔记<\u002Fli>\n          <li>完成剩余所有研究生能力基础训练测验<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-learn\">学习任务<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items\">\n          <li>学会如何完成高质量的讨论,语言开始学术化,熟练使用 APA 格式进行讨论写作<\u002Fli>\n          <li>学会用 AI 辅助精读和略读<\u002Fli>\n          <li>习惯通过阅读更多的学术文献来积累相关领域的专业知识<\u002Fli>\n          <li>适应网络学习的模式,习惯通过邮件与任课教师交流<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n    <\u002Fdiv>\n  <\u002Farticle>\n\n  <!-- ============ PHASE 5 ============ -->\n  <article class=\"phase\">\n    <div class=\"stepper\">\n      <span class=\"step-num\">PHASE 05<\u002Fspan>\n    <\u002Fdiv>\n    <div class=\"card\">\n      <div class=\"phase-header\">\n        <p class=\"phase-meta\">Week 07 · 总结<\u002Fp>\n        <h2 class=\"phase-title\">第七周<\u002Fh2>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-due\">截止作业<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items due\">\n          <li>期末考试<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n\n      <div class=\"section\">\n        <div class=\"section-head\">\n          <span class=\"tag tag-learn\">学习任务<\u002Fspan>\n        <\u002Fdiv>\n        <ul class=\"items\">\n          <li>温故而知新<\u002Fli>\n          <li>总结自己一个学期的学习,确认自己的学习目标和专业研究兴趣领域<\u002Fli>\n        <\u002Ful>\n      <\u002Fdiv>\n    <\u002Fdiv>\n  <\u002Farticle>\n\n<\u002Fmain>\n\n<footer class=\"site-footer\">\n  Arizona State University <span>·<\u002Fspan> School of Social and Behavioral Sciences <span>·<\u002Fspan> AZX Online M.S. in Psychology <span>·<\u002Fspan> Summer Semester\n<\u002Ffooter>\n\n\n\n<\u002Fbody><\u002Fhtml>"
+  </script>
+</body>
+</html>
